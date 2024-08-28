@@ -3,7 +3,7 @@ ARG VERSION=v3.38.0
 # =================================================================================================
 # BUILDER STAGE
 # =================================================================================================
-FROM mcr.microsoft.com/devcontainers/go:1.22-bookworm AS builder
+FROM mcr.microsoft.com/devcontainers/go:1.22-bookworm@sha256:9365d351be4c241a2b964a31f8181194c9ca1f314ee4c4ec80aa248b8d4e7d63 AS builder
 
 ARG VERSION
 ARG TARGETPLATFORM
