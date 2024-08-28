@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Docker Release: Taskfile"
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "containers/taskfile/**/*"
+
+jobs:
+  release:
+    uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
+    secrets: inherit
+    with:
+      image-name: ghcr.io/mirceanton/taskfile
+      platforms: linux/amd64, linux/arm64
+      custom-tag: "testing"
+      context: containers/taskfile
+      dockerfile: containers/taskfile/Dockerfile
