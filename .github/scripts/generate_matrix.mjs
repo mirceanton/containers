@@ -68,6 +68,11 @@ async function imageExists(image_name, version) {
     }
 }
 
+function getPullRequestNumber(ref) {
+    const match = ref.match(/^refs\/pull\/(\d+)\/merge$/);
+    return match ? match[1] : null;
+}
+
 async function generateMatrix() {
     const basePath = 'containers';
     const matrix = [];
@@ -82,9 +87,9 @@ async function generateMatrix() {
 
         if (fs.statSync(folderPath).isDirectory() && fs.existsSync(dockerfilePath)) {
             try {
-                const version = extractVersion(dockerfilePath);
+                let version = extractVersion(dockerfilePath);
                 if (isPullRequest) {
-                    toolVersion = `pr-${prNumber}-${toolVersion}`;
+                    version = `pr-${prNumber}-${version}`;
                 }
                 const exists = await imageExists(image_name, version);
 
