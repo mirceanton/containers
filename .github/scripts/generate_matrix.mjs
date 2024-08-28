@@ -31,7 +31,7 @@ import path from 'path'
 import { Octokit } from '@octokit/rest'
 
 // Configuration from environment variables
-const GITHUB_OWNER = process.env.GITHUB_OWNER;
+const GITHUB_OWNER = process.env.GITHUB_REPOSITORY.split('/')[0];
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 const octokit = new Octokit({ auth: GITHUB_TOKEN });
@@ -83,8 +83,9 @@ async function generateMatrix() {
                     console.log(`Image ${image_name}:${version} already exists. Skipping build.`);
                 } else {
                     matrix.push({
-                        name: image_name,
-                        path: folderPath,
+                        image_name: `ghcr.io/${GITHUB_OWNER}/${image_name}`,
+                        context: folderPath,
+                        dockerfile: dockerfilePath,
                         version: version
                     });
                 }
@@ -95,7 +96,12 @@ async function generateMatrix() {
         }
     }
 
-    console.log(JSON.stringify({ include: matrix }, null, 2));
+    fs.writeFile("./matrix.json", JSON.stringify({ include: matrix }, null, 2), function (err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("matrix.json file was saved!");
+    });
 }
 
 generateMatrix().catch(error => {

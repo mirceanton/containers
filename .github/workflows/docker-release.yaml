@@ -1,20 +1,47 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: "Docker Release: Taskfile"
+name: "Docker: Build and Push"
 
 on:
-  pull_request:
-    branches: ["main"]
+  push:
     paths:
-      - "containers/taskfile/**/*"
+      - 'containers/**'
+  pull_request:
+    paths:
+      - 'containers/**'
 
 jobs:
-  release:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+    env:
+      GITHUB_OWNER: ${{ secrets.GHCR_REPO }}  # GHCR repo name
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate matrix
+        id: generate-matrix
+        run: |
+          npm run generate-matrix
+          echo "::set-output name=matrix::$(cat matrix.json)"
+
+  build:
+    needs: generate-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
     secrets: inherit
     with:
-      image-name: ghcr.io/mirceanton/taskfile
+      image-name: ${{ matrix.image_name }}
       platforms: linux/amd64, linux/arm64
-      custom-tag: "testing"
-      context: containers/taskfile
-      dockerfile: containers/taskfile/Dockerfile
+      custom-tag: ${{ matrix.version }}
+      context: ${{ matrix.context }}
+      dockerfile: ${{ matrix.dockerfile }}
