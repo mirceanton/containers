@@ -14,7 +14,7 @@ concurrency:
 jobs:
   generate-matrix:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
+    container: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm@sha256:aedf26ccde02f734a8d8879778f5daac6c71609bb1df1b5a3e9d708f3c2827a2
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: Clean PR Images
         if: "${{ env.TOKEN != '' }}"
-        uses: stumpylog/image-cleaner-action/ephemeral@v0.8.0
+        uses: stumpylog/image-cleaner-action/ephemeral@0924047a3709a8f39313ec9e5f5888597e3bf81b # v0.8.0
         with:
           token: "${{ env.TOKEN }}"
           owner: "${{ github.repository_owner }}"
@@ -77,7 +77,7 @@ jobs:
     steps:
       - name: Clean untagged images
         if: "${{ env.TOKEN != '' }}"
-        uses: stumpylog/image-cleaner-action/untagged@v0.8.0
+        uses: stumpylog/image-cleaner-action/untagged@0924047a3709a8f39313ec9e5f5888597e3bf81b # v0.8.0
         with:
           token: "${{ env.TOKEN }}"
           owner: "${{ github.repository_owner }}"
