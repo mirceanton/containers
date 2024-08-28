@@ -5,10 +5,10 @@ name: "Docker: Build and Push"
 on:
   push:
     paths:
-      - 'containers/**'
+      - "containers/**"
   pull_request:
     paths:
-      - 'containers/**'
+      - "containers/**"
 
 jobs:
   generate-matrix:
@@ -37,6 +37,8 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
           GITHUB_REPOSITORY: "${{ github.repository }}"
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF: ${{ github.ref }}
         run: |
           matrix=$(node .github/scripts/generate_matrix.mjs)
           echo "matrix=${matrix}" | tee $GITHUB_OUTPUT
