@@ -80,7 +80,7 @@ async function generateMatrix() {
                 const exists = await imageExists(image_name, version);
 
                 if (exists) {
-                    console.log(`Image ${image_name}:${version} already exists. Skipping build.`);
+                    console.debug(`Image ${image_name}:${version} already exists. Skipping build.`);
                 } else {
                     matrix.push({
                         image_name: `ghcr.io/${GITHUB_OWNER}/${image_name}`,
@@ -96,12 +96,9 @@ async function generateMatrix() {
         }
     }
 
-    fs.writeFile("./matrix.json", JSON.stringify({ include: matrix }, null, 2), function (err) {
-        if (err) {
-            return console.log(err);
-        }
-        console.log("matrix.json file was saved!");
-    });
+    console.log(
+        JSON.stringify({ include: matrix }, null, 0)
+    )
 }
 
 generateMatrix().catch(error => {

@@ -38,9 +38,8 @@ jobs:
           GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
           GITHUB_REPOSITORY: "${{ github.repository }}"
         run: |
-          npm run generate-matrix
-          cat matrix.json
-          echo "matrix=$(cat matrix.json)" >> $GITHUB_OUTPUT
+          matrix=$(node .github/scripts/generate_matrix.mjs)
+          echo "matrix=${matrix}" | tee $GITHUB_OUTPUT
 
   build:
     uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
