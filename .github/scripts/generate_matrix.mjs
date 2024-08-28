@@ -83,6 +83,7 @@ async function generateMatrix() {
                     console.debug(`Image ${image_name}:${version} already exists. Skipping build.`);
                 } else {
                     matrix.push({
+                        job_name: image_name,
                         image_name: `ghcr.io/${GITHUB_OWNER}/${image_name}`,
                         context: folderPath,
                         dockerfile: dockerfilePath,

@@ -42,7 +42,7 @@ jobs:
           echo "matrix=${matrix}" | tee $GITHUB_OUTPUT
 
   build:
-    name: ${{ matrix.image_name }}
+    name: ${{ matrix.job_name }}
     uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
     needs: generate-matrix
     strategy:
