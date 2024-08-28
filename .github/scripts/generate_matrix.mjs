@@ -88,10 +88,10 @@ async function generateMatrix() {
         if (fs.statSync(folderPath).isDirectory() && fs.existsSync(dockerfilePath)) {
             try {
                 let version = extractVersion(dockerfilePath);
+                const exists = await imageExists(image_name, version);
                 if (isPullRequest) {
                     version = `pr-${prNumber}-${version}`;
                 }
-                const exists = await imageExists(image_name, version);
 
                 if (exists) {
                     console.debug(`Image ${image_name}:${version} already exists. Skipping build.`);
