@@ -33,11 +33,11 @@ jobs:
           echo "::set-output name=matrix::$(cat matrix.json)"
 
   build:
+    uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
     needs: generate-matrix
-    runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
-    uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
+    secrets: inherit
     with:
       image-name: ${{ matrix.image_name }}
       platforms: linux/amd64, linux/arm64
