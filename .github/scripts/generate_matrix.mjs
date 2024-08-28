@@ -33,6 +33,9 @@ import { Octokit } from '@octokit/rest'
 // Configuration from environment variables
 const GITHUB_OWNER = process.env.GITHUB_REPOSITORY.split('/')[0];
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_EVENT_NAME = process.env.GITHUB_EVENT_NAME;
+const GITHUB_REF = process.env.GITHUB_REF;
+
 
 const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
@@ -69,6 +72,9 @@ async function generateMatrix() {
     const basePath = 'containers';
     const matrix = [];
 
+    const isPullRequest = GITHUB_EVENT_NAME === 'pull_request';
+    const prNumber = isPullRequest ? getPullRequestNumber(GITHUB_REF) : null;
+
     for (const folder of fs.readdirSync(basePath)) {
         const image_name = folder;
         const folderPath = path.join(basePath, folder);
@@ -77,6 +83,9 @@ async function generateMatrix() {
         if (fs.statSync(folderPath).isDirectory() && fs.existsSync(dockerfilePath)) {
             try {
                 const version = extractVersion(dockerfilePath);
+                if (isPullRequest) {
+                    toolVersion = `pr-${prNumber}-${toolVersion}`;
+                }
                 const exists = await imageExists(image_name, version);
 
                 if (exists) {
