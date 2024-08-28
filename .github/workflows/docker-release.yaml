@@ -4,11 +4,10 @@ name: "Docker: Build and Push"
 
 on:
   push:
-    paths:
-      - "containers/**"
+    branches: ["main"]
+    paths: ["containers/**"]
   pull_request:
-    paths:
-      - "containers/**"
+    paths: ["containers/**"]
 
 jobs:
   generate-matrix:
