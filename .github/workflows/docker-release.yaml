@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Docker: Build and Push"
+
+on:
+  push:
+    paths:
+      - "containers/**"
+  pull_request:
+    paths:
+      - "containers/**"
+
+jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@31c86eb3b33c9b601a1f60f98dcbfd1d70f379b4 # v1.10.3
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate matrix
+        id: generate-matrix
+        env:
+          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
+          GITHUB_REPOSITORY: "${{ github.repository }}"
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          matrix=$(node .github/scripts/generate_matrix.mjs)
+          echo "matrix=${matrix}" | tee $GITHUB_OUTPUT
+
+  build:
+    name: ${{ matrix.job_name }}
+    uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
+    needs: generate-matrix
+    strategy:
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+    secrets: inherit
+    with:
+      image-name: ${{ matrix.image_name }}
+      platforms: linux/amd64, linux/arm64
+      custom-tag: ${{ matrix.version }}
+      context: ${{ matrix.context }}
+      dockerfile: ${{ matrix.dockerfile }}
