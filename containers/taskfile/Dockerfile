@@ -29,14 +29,7 @@ RUN goreleaser build --single-target --clean --verbose --output=/go/task/dist/ta
 # PRODUCTION STAGE
 # =================================================================================================
 FROM scratch
-USER nobody:nogroup
+USER 8675:8675
 COPY --from=builder --chmod=555 /go/task/dist/task /task
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ENTRYPOINT ["/task"]
-
-ARG VERSION
-LABEL org.opencontainers.image.title="Taskfile"
-LABEL org.opencontainers.image.description="Task runner / simpler Make alternative written in Go"
-LABEL org.opencontainers.image.version=$VERSION
-LABEL org.opencontainers.image.source="https://github.com/go-task/task"
-LABEL org.opencontainers.image.licenses="MIT"
