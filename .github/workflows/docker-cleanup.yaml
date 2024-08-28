@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - generate-matrix
-      - cleanup-images
+      - cleanup-tagged-images
     strategy:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     env:
