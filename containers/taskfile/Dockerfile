@@ -22,13 +22,13 @@ RUN git checkout ${TASKFILE_VERSION}
 ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 ENV CGO_ENABLED=0
-RUN goreleaser build --single-target
+RUN goreleaser build --single-target --clean --verbose --output=/go/task/dist/task
 
 # =================================================================================================
 # PRODUCTION STAGE
 # =================================================================================================
 FROM scratch
 USER 8675:8675
-COPY --from=builder --chmod=555 /go/task/task /task
+COPY --from=builder --chmod=555 /go/task/dist/task /task
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ENTRYPOINT ["/task"]
