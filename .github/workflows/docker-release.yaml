@@ -38,7 +38,6 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
-    secrets: inherit
     with:
       image-name: ${{ matrix.image_name }}
       platforms: linux/amd64, linux/arm64
