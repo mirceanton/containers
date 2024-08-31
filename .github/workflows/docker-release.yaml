@@ -32,12 +32,12 @@ jobs:
         run: npm install
 
       - name: Generate matrix
+        run: npm run genmatrix
         env:
           GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
           GITHUB_REPOSITORY: "${{ github.repository }}"
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_REF: ${{ github.ref }}
-        run: npm run genmatrix
 
       - name: Save Matrix
         id: matrix
