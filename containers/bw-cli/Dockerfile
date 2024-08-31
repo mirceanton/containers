@@ -6,20 +6,42 @@ ARG VERSION=2024.8.1
 FROM mcr.microsoft.com/devcontainers/javascript-node:20-bookworm AS build
 
 ARG VERSION
-ARG TARGETPLATFORM
-ARG TARGETARCH
-ARG TARGETOS
+RUN echo "Building Bitwarden CLI v${VERSION}"
 
+ARG TARGETARCH
+RUN [[ "$TARGETARCH" == "amd64" ]] && export ARCH="x64"
+RUN [[ "$TARGETARCH" == "arm64" ]] && export ARCH="arm64"
+RUN [[ "$ARCH" == "" ]] && echo "Unsupported architecture: $TARGETARCH" && exit 1
+RUN echo "Building for arch ${ARCH}"
+
+ARG TARGETOS
+RUN echo "Building for os ${TARGETOS}"
+
+# Install dependencies
+RUN npm install -g pkg
+
+# Clone the github repository
 WORKDIR /app
-COPY build.sh .
-RUN bash build.sh
-RUN mv /app/clients/apps/cli/dist/bw /app/bw
+RUN git clone https://github.com/bitwarden/clients
+WORKDIR /app/clients
+RUN git checkout cli-v${VERSION}
+
+# Install dependencies
+RUN npm install
+WORKDIR /app/clients/apps/cli
+RUN npm install
+
+# Build the binary
+RUN npm run build:oss
+
+# Package the binary
+RUN pkg . --targets node18-${TARGETOS}-${ARCH} --output=/bin/bw
 
 # =================================================================================================
 # PRODUCTION STAGE
 # =================================================================================================
 FROM scratch
 USER 8675:8675
-COPY --from=build /app/bw /usr/local/bin/bw
+COPY --from=build /bin/bw /usr/local/bin/bw
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ENTRYPOINT ["/usr/local/bin/bw"]
