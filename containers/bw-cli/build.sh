@@ -3,7 +3,7 @@
 if [[ "$TARGETARCH" == "amd64" ]]; then
   export ARCH="x64"
 elif [[ "$TARGETARCH" == "arm64" ]]; then
-  export GOARCH="arm64"
+  export ARCH="arm64"
 else
   echo "Unsupported architecture: $TARGETARCH"
   exit 1
