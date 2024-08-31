@@ -34,5 +34,5 @@ RUN npm run build:oss && \
 FROM scratch
 USER 8675:8675
 COPY --from=build /app/bw /usr/local/bin/bw
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ENTRYPOINT ["/usr/local/bin/bw"]
