@@ -89,13 +89,14 @@ async function generateMatrix() {
             try {
                 let version = extractVersion(dockerfilePath);
                 const exists = await imageExists(image_name, version);
-                if (isPullRequest) {
-                    version = `pr-${prNumber}-${version}`;
-                }
 
                 if (exists) {
-                    console.debug(`Image ${image_name}:${version} already exists. Skipping build.`);
+                    console.info(`Image ${image_name}:${version} already exists. Skipping build.`);
                 } else {
+                    if (isPullRequest) {
+                        version = `pr-${prNumber}-${version}`;
+                    }
+                    console.info(`Addingg image ${image_name}:${version} to the job matrix.`);
                     matrix.push({
                         job_name: image_name,
                         image_name: `ghcr.io/${GITHUB_OWNER}/${image_name}`,
@@ -110,10 +111,16 @@ async function generateMatrix() {
             }
         }
     }
+    console.log(`Job matrix: ${JSON.stringify({ include: matrix }, null, 2)}`)
 
-    console.log(
-        JSON.stringify({ include: matrix }, null, 0)
-    )
+    fs.writeFile('matrix.json', JSON.stringify({ include: matrix }, null, 0), err => {
+        if (err) {
+            console.log("Failed to write matrix to file.")
+            console.error(err);
+        } else {
+            console.log("Matrix dumped to file successfully.")
+        }
+    });
 }
 
 generateMatrix().catch(error => {

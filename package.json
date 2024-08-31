@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "@octokit/rest": "^21.0.2"
+  },
+  "scripts": {
+    "genmatrix": "node .github/scripts/generate_matrix.mjs"
   }
 }
