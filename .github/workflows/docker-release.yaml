@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
     outputs:
-      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@31c86eb3b33c9b601a1f60f98dcbfd1d70f379b4 # v1.10.3
@@ -32,14 +32,17 @@ jobs:
         run: npm install
 
       - name: Generate matrix
-        id: generate-matrix
         env:
           GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
           GITHUB_REPOSITORY: "${{ github.repository }}"
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_REF: ${{ github.ref }}
+        run: npm run genmatrix
+
+      - name: Save Matrix
+        id: matrix
         run: |
-          matrix=$(node .github/scripts/generate_matrix.mjs)
+          matrix=$(cat matrix.json)
           echo "matrix=${matrix}" | tee $GITHUB_OUTPUT
 
   build:
