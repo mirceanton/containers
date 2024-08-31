@@ -24,9 +24,10 @@ WORKDIR /app/clients/apps/cli
 RUN npm install
 
 # Build the CLI
-RUN npm run build:oss && \
+RUN [[ "$TARGETARCH" == "amd64" ]] && ARCH="x64" || ARCH="$TARGETARCH" && \
+    npm run build:oss && \
     npm install -g pkg && \
-    pkg . --targets node18-${TARGETOS}-${TARGETARCH} --output=./dist/bw && \
+    pkg . --targets node18-${TARGETOS}-${ARCH} --output=./dist/bw && \
     mv ./dist/bw /app/bw
 
 # =================================================================================================
