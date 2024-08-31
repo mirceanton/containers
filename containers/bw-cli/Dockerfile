@@ -25,7 +25,8 @@ RUN npm install
 
 # Build the CLI
 RUN npm run build:oss && \
-    pkg . --targets node18-linux-x64 --outuput=./dist/bw && \
+    npm install -g pkg && \
+    pkg . --targets node18-${TARGETOS}-${TARGETARCH} --output=./dist/bw && \
     mv ./dist/bw /app/bw
 
 # =================================================================================================
