@@ -9,9 +9,9 @@ ARG VERSION
 RUN echo "Building Bitwarden CLI v${VERSION}"
 
 ARG TARGETARCH
-RUN [[ "$TARGETARCH" == "amd64" ]] && export ARCH="x64"
-RUN [[ "$TARGETARCH" == "arm64" ]] && export ARCH="arm64"
-RUN [[ "$ARCH" == "" ]] && echo "Unsupported architecture: $TARGETARCH" && exit 1
+RUN if [[ "$TARGETARCH" == "amd64" ]]; then export ARCH="x64"; fi
+RUN if [[ "$TARGETARCH" == "arm64" ]]; then export ARCH="arm64"; fi
+RUN if [[ "$ARCH" == "" ]]; then echo "Unsupported architecture: $TARGETARCH" && exit 1; fi
 RUN echo "Building for arch ${ARCH}"
 
 ARG TARGETOS
@@ -35,13 +35,13 @@ RUN npm install
 RUN npm run build:oss
 
 # Package the binary
-RUN pkg . --targets node18-${TARGETOS}-${ARCH} --output=/bin/bw
+RUN pkg . --targets node18-${TARGETOS}-${ARCH} --output=/bw
 
 # =================================================================================================
 # PRODUCTION STAGE
 # =================================================================================================
 FROM scratch
 USER 8675:8675
-COPY --from=build /bin/bw /usr/local/bin/bw
+COPY --from=build /bw /bw
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-ENTRYPOINT ["/usr/local/bin/bw"]
+ENTRYPOINT ["/bw"]
