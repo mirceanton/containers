@@ -10,25 +10,10 @@ ARG TARGETPLATFORM
 ARG TARGETARCH
 ARG TARGETOS
 
-# Clone the github repository
 WORKDIR /app
-RUN git clone https://github.com/bitwarden/clients
-
-# Install the root-level dependencies
-WORKDIR /app/clients
-RUN git checkout cli-v${VERSION}
-RUN npm install
-
-# Install CLI dependencies
-WORKDIR /app/clients/apps/cli
-RUN npm install
-
-# Build the CLI
-RUN [[ "$TARGETARCH" == "amd64" ]] && ARCH="x64" || ARCH="$TARGETARCH" && \
-    npm run build:oss && \
-    npm install -g pkg && \
-    pkg . --targets node18-${TARGETOS}-${ARCH} --output=./dist/bw && \
-    mv ./dist/bw /app/bw
+COPY build.sh .
+RUN bash build.sh
+RUN mv /app/clients/apps/cli/dist/bw /app/bw
 
 # =================================================================================================
 # PRODUCTION STAGE
