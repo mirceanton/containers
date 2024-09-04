@@ -111,19 +111,27 @@ async function generateMatrix() {
             }
         }
     }
-    console.log(`Job matrix: ${JSON.stringify({ include: matrix }, null, 2)}`)
 
-    fs.writeFile('matrix.json', JSON.stringify({ include: matrix }, null, 0), err => {
-        if (err) {
-            console.log("Failed to write matrix to file.")
-            console.error(err);
-        } else {
-            console.log("Matrix dumped to file successfully.")
-        }
-    });
+    return matrix;
 }
 
-generateMatrix().catch(error => {
+const matrixFile = 'matrix.json';
+let matrixString = ""
+const jobMatrix = await generateMatrix().catch(error => {
     console.error('Error generating matrix:', error);
     process.exit(1);
+});
+
+if (jobMatrix.length > 0) {
+    matrixString = JSON.stringify({ include: jobMatrix }, null, 0)
+}
+
+console.log(`Job matrix: ${matrixString}`)
+fs.writeFile(matrixFile, matrixString, err => {
+    if (err) {
+        console.log("Failed to write matrix to file.")
+        console.error(err);
+    } else {
+        console.log("Matrix dumped to file successfully.")
+    }
 });
