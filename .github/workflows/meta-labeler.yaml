@@ -1,14 +1,13 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: "Meta: PR Labeler"
+name: Meta - Labeler
 
 on:
-  workflow_dispatch: {} # Manual Trigger
   pull_request_target: {}
 
 jobs:
-  labeler:
-    uses: mirceanton/reusable-workflows/.github/workflows/meta-labeler.yaml@main
+  pr-labeler:
+    uses: mirceanton/reusable-workflows/.github/workflows/meta-labeler.yaml@17d8ef4df857d93b905170956fbbcd56b296e8bb
     secrets: inherit
     with:
-      config-file: .github/configs/labeler.yaml
+      config-file: ".github/configs/labeler.yaml"

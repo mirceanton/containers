@@ -48,14 +48,15 @@ jobs:
   build:
     name: ${{ matrix.job_name }}
     needs: generate-matrix
-    uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@main
+    uses: mirceanton/reusable-workflows/.github/workflows/docker-release.yaml@17d8ef4df857d93b905170956fbbcd56b296e8bb
     if: ${{ fromJson(needs.generate-matrix.outputs.matrix)['include'].length > 0 }}
     strategy:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     secrets: inherit
     with:
-      image-name: ${{ matrix.image_name }}
+      image: ${{ matrix.image_name }}
       platforms: linux/amd64, linux/arm64
-      custom-tag: ${{ matrix.version }}
+      tags: ${{ matrix.version }}
       context: ${{ matrix.context }}
       dockerfile: ${{ matrix.dockerfile }}
+      dry-run: false
