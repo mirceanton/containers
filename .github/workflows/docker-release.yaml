@@ -49,7 +49,7 @@ jobs:
     name: ${{ matrix.job_name }}
     needs: generate-matrix
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-docker-build-push.yaml@f4dce998a168bbe2e53664acf4dd29407cd3d29f # v3.4.19
-    if: ${{ fromJson(needs.generate-matrix.outputs.matrix)['include'].length > 0 }}
+    # if: ${{ fromJson(needs.generate-matrix.outputs.matrix)['include'].length > 0 }}
     strategy:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     secrets: inherit
