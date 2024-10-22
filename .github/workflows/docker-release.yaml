@@ -12,7 +12,7 @@ on:
 jobs:
   generate-matrix:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm@sha256:aedf26ccde02f734a8d8879778f5daac6c71609bb1df1b5a3e9d708f3c2827a2
+    container: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm@sha256:d493ef047b5ee96655fb543919e6e036dc87582509e6c622c9fe999b6eeb5148
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
