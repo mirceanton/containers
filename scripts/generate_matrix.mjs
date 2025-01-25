@@ -45,14 +45,14 @@ async function generateMatrix() {
                 const platforms = metadata.platforms || defaultPlatforms;
 
                 for (const tag of imageTags) {
-                    const fullVersion = isPullRequest ? `pr-${prNumber}-${tag}` : tag;
+                    const fullVersion = isPullRequest ? `pr-${prNumber}` : imageTags.join(',');
 
                     console.info(`Adding image ${imageName}:${fullVersion} to the job matrix.`);
                     matrix.push({
                         job_name: `${imageName}-${fullVersion}`,
                         image_name: `ghcr.io/${GITHUB_OWNER}/${imageName}`,
                         platforms: platforms.join(','),
-                        image_tags: imageTags.join(','),
+                        image_tags: fullVersion,
                         context: folderPath,
                         dockerfile: dockerfilePath,
                     });
