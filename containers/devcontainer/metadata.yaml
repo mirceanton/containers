@@ -1,0 +1,9 @@
+---
+image:
+  name: devcontainers/base
+  tags:
+    - bookworm
+
+platforms:
+  - linux/amd64
+  - linux/arm64
