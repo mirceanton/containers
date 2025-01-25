@@ -49,14 +49,13 @@ jobs:
     name: ${{ matrix.job_name }}
     needs: generate-matrix
     uses: mirceanton/reusable-workflows/.github/workflows/reusable-docker-build-push.yaml@9636dd03edf5f6a14372182c4c07985c85485b9f # v3.4.50
-    # if: ${{ fromJson(needs.generate-matrix.outputs.matrix)['include'].length > 0 }}
     strategy:
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     secrets: inherit
     with:
       image: ${{ matrix.image_name }}
-      platforms: linux/amd64, linux/arm64
-      tags: ${{ matrix.version }}
+      platforms: ${{ matrix.platforms }}
+      tags: ${{ matrix.image_tags }}
       context: ${{ matrix.context }}
       dockerfile: ${{ matrix.dockerfile }}
       dry-run: false
