@@ -39,9 +39,7 @@ async function generateMatrix() {
 
         if (fs.statSync(folderPath).isDirectory() && fs.existsSync(dockerfilePath)) {
             try {
-                const version = extractVersion(dockerfilePath);
                 const metadata = parseMetadata(metadataPath);
-
                 const imageName = metadata.image.name
                 const imageTags = metadata.image.tags || defaultTags;
                 const platforms = metadata.platforms || defaultPlatforms;
