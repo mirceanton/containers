@@ -54,7 +54,7 @@ async function generateMatrix() {
                         platforms: platforms.join(','),
                         image_tags: imageTags.join(','),
                         context: folderPath,
-                        dockerfile: dockerfilePath
+                        dockerfile: dockerfilePath,
                     });
                 }
             } catch (error) {
