@@ -66,7 +66,7 @@ async function generateMatrix() {
 
     console.log(`Job matrix: ${JSON.stringify({ include: matrix }, null, 2)}`);
 
-    fs.writeFile('matrix.json', JSON.stringify({ include: matrix }, null, 2), err => {
+    fs.writeFile('matrix.json', JSON.stringify({ include: matrix }, null, 0), err => {
         if (err) {
             console.error('Failed to write matrix to file:', err);
         } else {
