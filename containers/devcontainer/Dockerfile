@@ -1,10 +1,10 @@
-ARG MISE_VERSION=2025.1.14
+ARG MISE_VERSION=2025.1.14@sha256:785979564cbc70cc123ef957d2c090e7e84bbcde88b7b292e0d6b4a788fad2d1
 FROM docker.io/jdxcode/mise:${MISE_VERSION} AS mise
 
 # =================================================================================================
 # Main image
 # =================================================================================================
-FROM mcr.microsoft.com/devcontainers/base:bookworm
+FROM mcr.microsoft.com/devcontainers/base:bookworm@sha256:6155a486f236fd5127b76af33086029d64f64cf49dd504accb6e5f949098eb7e
 COPY --from=mise /usr/local/bin/mise /usr/local/bin/mise
 ENV EDITOR=vim
 
