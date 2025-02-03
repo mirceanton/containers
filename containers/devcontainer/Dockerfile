@@ -1,4 +1,4 @@
-ARG MISE_VERSION=2025.1.15@sha256:5847d099105099c9cf26c0aabea0fa8574e381c223663c501ecdbb713fe6b36c
+ARG MISE_VERSION=2025.2.1@sha256:b879fe9817ae3cad6d96280f012457f54810bc55b6a0a73361f6752980aa8ebf
 FROM docker.io/jdxcode/mise:${MISE_VERSION} AS mise
 
 # =================================================================================================
