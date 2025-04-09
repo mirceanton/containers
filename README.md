@@ -1,12 +1,4 @@
-<div align="center">
-
 # Containers
-
-_An opinionated collection of container images_
-
-</div>
-
-<div align="center">
 
 Welcome to my container images repository! If you are looking for a container, start by [browsing the GitHub Packages page for this repository's packages](https://github.com/orgs/mirceanton/packages?repo_name=containers).
 
