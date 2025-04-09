@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=docker depName=koalaman/shellcheck
-  default = "v0.9.0"
+  default = "v0.10.0"
 }
 
 variable "SOURCE" {
