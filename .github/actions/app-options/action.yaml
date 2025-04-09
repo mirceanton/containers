@@ -22,7 +22,7 @@ outputs:
 runs:
   using: composite
   steps:
-    - name:  Application Options
+    - name: Application Options
       id: options
       shell: bash
       run: |
