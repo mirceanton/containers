@@ -1,0 +1,9 @@
+---
+schemaVersion: "2.0.0"
+fileExistenceTests:
+  - name: yamllint
+    path: /usr/local/bin/yamllint
+    shouldExist: true
+  - name: git
+    path: /usr/bin/git
+    shouldExist: true
