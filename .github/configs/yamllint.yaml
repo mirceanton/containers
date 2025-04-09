@@ -8,6 +8,8 @@ rules:
 
   line-length:
     max: 200
+    ignore:
+      - .github/workflows/app-builder.yaml
 
   braces:
     level: warning
