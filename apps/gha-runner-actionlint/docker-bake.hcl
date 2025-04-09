@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=docker depName=rhysd/actionlint
-  default = "1.7.6"
+  default = "1.7.7"
 }
 
 variable "SOURCE" {
