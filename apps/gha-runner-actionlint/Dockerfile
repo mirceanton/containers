@@ -5,14 +5,9 @@ FROM ubuntu:24.04
 ARG TARGETARCH
 
 # Install common utilities
-RUN apt-get update && \
-    apt-get install -y \
+RUN apt-get update \
+    && apt-get install -y \
         git \
-        curl \
-        wget \
-        ca-certificates \
-        jq \
-        build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

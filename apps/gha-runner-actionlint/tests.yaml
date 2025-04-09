@@ -4,3 +4,6 @@ fileExistenceTests:
   - name: actionlint
     path: /usr/local/bin/actionlint
     shouldExist: true
+  - name: git
+    path: /usr/bin/git
+    shouldExist: true
