@@ -65,7 +65,7 @@ jobs:
               echo "Failed to get registry version for ${{ matrix.app }}"
               exit 1
           fi
-          echo "version=${version}" >> $GITHUB_OUTPUT
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
 
       - if: ${{ steps.app-options.outputs.version != steps.registry.outputs.version }}
         name: Retry Release
@@ -77,10 +77,11 @@ jobs:
               -f app=${{ matrix.app }} \
               -f release=true
 
+          # shellcheck disable=SC2006
           {
-              echo '## Retrying Release'
-              echo
-              echo '| Container Name | Actual Version | Expected Version |'
-              echo '|----------------|------------------|----------------|'
-              echo '| `${{ matrix.app }}` | `${{ steps.registry.outputs.version }}` | `${{ steps.app-options.outputs.version }}` |'
-          } >> $GITHUB_STEP_SUMMARY
+              echo "## Retrying Release"
+              echo ""
+              echo "| Container Name | Actual Version | Expected Version |"
+              echo "|----------------|------------------|----------------|"
+              echo "| `${{ matrix.app }}` | `${{ steps.registry.outputs.version }}` | `${{ steps.app-options.outputs.version }}` |"
+          } >> "$GITHUB_STEP_SUMMARY"

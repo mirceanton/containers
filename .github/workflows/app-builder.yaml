@@ -189,20 +189,21 @@ jobs:
       - name: Create Manifest List and Push
         working-directory: ${{ runner.temp }}/digests
         run: |
-          docker buildx imagetools create \
-              $(jq --raw-output --compact-output '.target."docker-metadata-action".tags | map(select(startswith("ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}")) | "-t " + .) | join(" ")' ${{ runner.temp }}/docker-metadata-action-bake.json) \
-              $(printf 'ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}@sha256:%s ' *)
+          TAG=$(jq --raw-output --compact-output '.target."docker-metadata-action".tags | map(select(startswith("ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}")) | "-t " + .) | join(" ")' "${{ runner.temp }}/docker-metadata-action-bake.json")
+          DIGEST=$(printf 'ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}@sha256:%s ' *)
+          docker buildx imagetools create "$TAG" "$DIGEST"
 
       - name: Inspect Image
         run: |
-          docker buildx imagetools inspect ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}:$(jq --raw-output '.target."docker-metadata-action".args.DOCKER_META_VERSION' ${{ runner.temp }}/docker-metadata-action-bake.json)
+          tag=$(jq --raw-output '.target."docker-metadata-action".args.DOCKER_META_VERSION' "${{ runner.temp }}/docker-metadata-action-bake.json")
+          docker buildx imagetools inspect "ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}:${tag}"
 
       - name: Export Digest
         id: digest
         run: |
           TAG=$(jq --raw-output '.target."docker-metadata-action".args.DOCKER_META_VERSION' ${{ runner.temp }}/docker-metadata-action-bake.json)
-          DIGEST=$(docker buildx imagetools inspect ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}:${TAG} --format '{{ json . }}' | jq --raw-output '.manifest.digest')
-          echo "digest=${DIGEST}" >> $GITHUB_OUTPUT
+          DIGEST=$(docker buildx imagetools inspect "ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}:${TAG}" --format '{{ json . }}' | jq --raw-output '.manifest.digest')
+          echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
 
   attest:
     if: ${{ inputs.release }}
