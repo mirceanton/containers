@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=github-tags depName=rhysd/actionlint/tags
-  default = "v1.37.0"
+  default = "v1.7.7"
 }
 
 variable "SOURCE" {
