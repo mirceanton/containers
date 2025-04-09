@@ -1,0 +1,9 @@
+---
+schemaVersion: "2.0.0"
+fileExistenceTests:
+  - name: shellcheck
+    path: /usr/local/bin/shellcheck
+    shouldExist: true
+  - name: git
+    path: /usr/bin/git
+    shouldExist: true
