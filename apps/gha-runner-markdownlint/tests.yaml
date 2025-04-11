@@ -1,0 +1,9 @@
+---
+schemaVersion: "2.0.0"
+fileExistenceTests:
+  - name: markdownlint
+    path: /usr/local/bin/markdownlint
+    shouldExist: true
+  - name: git
+    path: /usr/bin/git
+    shouldExist: true
