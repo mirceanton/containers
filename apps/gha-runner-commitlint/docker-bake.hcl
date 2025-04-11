@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=github-tags depName=conventional-changelog/commitlint
-  default = "v19.7.0"
+  default = "v19.8.0"
 }
 
 variable "SOURCE" {
