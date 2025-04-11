@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=github-tags depName=igorshubovych/markdownlint-cli
-  default = "v0.43.0"
+  default = "v0.44.0"
 }
 
 variable "SOURCE" {
