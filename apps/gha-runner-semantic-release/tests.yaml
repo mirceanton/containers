@@ -1,0 +1,9 @@
+---
+schemaVersion: "2.0.0"
+fileExistenceTests:
+  - name: semantic-release
+    path: /usr/local/bin/semantic-release
+    shouldExist: true
+  - name: git
+    path: /usr/bin/git
+    shouldExist: true
