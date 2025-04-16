@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=github-tags depName=semantic-release/semantic-release
-  default = "v24.2.2"
+  default = "v24.2.3"
 }
 
 variable "SOURCE" {
